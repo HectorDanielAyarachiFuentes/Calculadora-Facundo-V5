@@ -65,6 +65,24 @@ button:focus-visible {
   color: #e84d4d;
 }
 
+body {
+  position: relative;
+  overflow: hidden;
+}
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(90deg, rgba(200, 200, 200, 0.04) 0 1px, transparent 1px 96px), repeating-linear-gradient(0deg, rgba(200, 200, 200, 0.04) 0 1px, transparent 1px 96px);
+  background-size: 96px 96px;
+  animation: move-grid 20s linear infinite;
+  z-index: -1;
+  opacity: 0.5;
+}
+
 /* --- ANIMACIONES GLOBALES Y KEYFRAMES --- */
 @keyframes fadeInScale-animation {
   to {
@@ -125,6 +143,61 @@ button:focus-visible {
   100% {
     background-color: transparent;
     transform: scale(1);
+  }
+}
+@keyframes move-grid {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -96px -96px;
+  }
+}
+@keyframes neon-pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(var(--neon-color-1), 0.2), 0 0 10px rgba(var(--neon-color-1), 0.2), 0 0 20px rgba(var(--neon-color-1), 0.2), 0 0 40px rgba(var(--neon-color-2), 0.1), inset 0 0 5px rgba(var(--neon-color-1), 0.1);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(var(--neon-color-1), 0.4), 0 0 20px rgba(var(--neon-color-1), 0.4), 0 0 40px rgba(var(--neon-color-1), 0.2), 0 0 80px rgba(var(--neon-color-2), 0.2), inset 0 0 10px rgba(var(--neon-color-1), 0.2);
+  }
+}
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+@keyframes glitch-main {
+  0%, 100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-3px, 3px);
+  }
+  40% {
+    transform: translate(-3px, -3px);
+  }
+  60% {
+    transform: translate(3px, 3px);
+  }
+  80% {
+    transform: translate(3px, -3px);
+  }
+}
+@keyframes glitch-anim-1 {
+  0% {
+    clip-path: inset(30% 0 60% 0);
+  }
+  100% {
+    clip-path: inset(50% 0 20% 0);
+  }
+}
+@keyframes glitch-anim-2 {
+  0% {
+    clip-path: inset(80% 0 10% 0);
+  }
+  100% {
+    clip-path: inset(10% 0 75% 0);
   }
 }
 /* --- CONTENEDORES PRINCIPALES DE LAYOUT --- */
@@ -481,6 +554,56 @@ header[role=banner] .subtitle a:hover {
   .bottom-nav__button--arrow {
     font-size: 7vw !important;
   }
+}
+
+.calculator-container {
+  --neon-color-1: #66FF66;
+  --neon-color-2: #6666FF;
+  animation: neon-pulse 5s infinite alternate;
+}
+
+.keyboard__button {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.1s ease;
+}
+.keyboard__button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+.keyboard__button .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: ripple-effect 0.6s linear;
+  pointer-events: none;
+}
+
+.display {
+  position: relative;
+}
+.display.glitch {
+  animation: glitch-main 0.3s linear;
+}
+.display.glitch::before, .display.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+  overflow: hidden;
+}
+.display.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 #FF3333;
+  animation: glitch-anim-1 0.8s infinite linear alternate-reverse;
+}
+.display.glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 #6666FF, 2px 2px #66FF66;
+  animation: glitch-anim-2 0.6s infinite linear alternate-reverse;
 }
 
 /* --- COMPONENTE: PANEL DE HISTORIAL --- */

@@ -3,19 +3,24 @@
 // =======================================================
 "use strict";
 
-// --- IMPORTACIONES (sin cambios) ---
+// --- IMPORTACIONES ---
 import {
     suma, resta, multiplica, divide, divideExt,
     desFacPri, raizCuadrada, parsearNumeros
 } from './operations/index.js';
 import {
-    display, salida, contenedor, teclado, divVolver,
+    // *** CORRECCIÓN: 'display' se define aquí, así que lo quito de la importación para evitar duplicados.
+    salida, contenedor, teclado, divVolver,
     botExp, botNor, errorMessages
 } from './config.js';
 import { crearMensajeError } from './operations/utils/dom-helpers.js';
 import { HistoryManager, HistoryPanel } from './history.js';
 
-// --- VARIABLES DE ESTADO (sin cambios) ---
+// --- ELEMENTOS DEL DOM (centralizados para evitar duplicados) ---
+// *** CORRECCIÓN: Definimos 'display' aquí una sola vez.
+const display = document.getElementById('display');
+
+// --- VARIABLES DE ESTADO ---
 let w;
 let divext = false;
 let lastDivisionState = {
@@ -24,7 +29,7 @@ let lastDivisionState = {
     tipo: ''
 };
 
-// --- INICIALIZACIÓN Y EVENTOS (sin cambios) ---
+// --- INICIALIZACIÓN Y EVENTOS ---
 function alCargar() {
     w = Math.min(window.innerHeight / 1.93, window.innerWidth / 1.5);
     contenedor.style.width = `${w}px`;
@@ -49,17 +54,19 @@ function alCargar() {
     HistoryPanel.init();
     actualizarEstadoDivisionUI(false);
     setupEventListeners();
+    setupTitleAnimation(); // *** CORRECCIÓN: Centralizamos la inicialización de la animación del título.
 }
 
 function setupEventListeners() {
-    teclado.removeEventListener('click', handleButtonClick);
-    divVolver.removeEventListener('click', handleButtonClick);
-    document.removeEventListener('keydown', handleKeyboardInput);
-    window.removeEventListener('resize', alCargar);
     teclado.addEventListener('click', handleButtonClick);
     divVolver.addEventListener('click', handleButtonClick);
     document.addEventListener('keydown', handleKeyboardInput);
     window.addEventListener('resize', alCargar);
+    
+    // *** CORRECCIÓN: El bucle para el efecto ripple va aquí, una sola vez.
+    document.querySelectorAll('.keyboard__button').forEach(button => {
+        button.addEventListener('click', handleRippleEffect);
+    });
 }
 
 // --- MANEJADORES DE ACCIONES ---
@@ -76,22 +83,13 @@ function handleButtonClick(event) {
 }
 
 function handleKeyboardInput(event) {
-    // ======================================================
-    // === INICIO DE LA CORRECCIÓN CLAVE PARA EL MODAL ===
-    // ======================================================
-    // Si el evento se originó en un <input> o <textarea> (como el del prompt de confirmación),
-    // permitimos que el navegador maneje la entrada de texto de forma nativa
-    // y no ejecutamos la lógica de la calculadora.
     if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
-        return; // Salir de la función si estamos en un campo de texto
+        return;
     }
-    // ======================================================
-    // === FIN DE LA CORRECCIÓN CLAVE ===
-    // ======================================================
 
     const key = event.key;
     if (/[0-9+\-*/=.,cC]/.test(key) || ['Enter', 'Backspace', 'Delete', 'Escape', 'x', 'X'].includes(key)) {
-        event.preventDefault(); // Esto solo se ejecutará si NO estamos en un input/textarea
+        event.preventDefault();
     }
     if (/[0-9]/.test(key)) escribir(key);
     else if (key === '+') escribir('+');
@@ -106,68 +104,67 @@ function handleKeyboardInput(event) {
     else if (key === 'Delete' || key === 'Escape') escribir('c');
 }
 
-// *** ¡NUEVA FUNCIÓN CENTRALIZADA Y ROBUSTA! ***
-// Esta función es llamada desde history.js y ahora también desde handleAction
-// para ejecutar CUALQUIER tipo de operación de forma consistente.
-export async function reExecuteOperationFromHistory(historyInput) {
-    bajarteclado();                   // 1. Muestra la pantalla de salida y oculta el teclado
-    salida.innerHTML = "";            // 2. Limpia la salida para la nueva operación
+// *** CORRECCIÓN: Nueva función para manejar el efecto Ripple y mantener el código limpio.
+function handleRippleEffect(e) {
+    const button = e.currentTarget;
+    const oldRipple = button.querySelector('.ripple');
+    if (oldRipple) {
+        oldRipple.remove();
+    }
 
-    let calculationSuccessful = false;
+    const rect = button.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const size = Math.max(button.clientWidth, button.clientHeight);
     
-    // Patrones para identificar el tipo de operación
+    const ripple = document.createElement('span');
+    ripple.classList.add('ripple');
+    ripple.style.left = `${x - size / 2}px`;
+    ripple.style.top = `${y - size / 2}px`;
+    ripple.style.width = ripple.style.height = `${size}px`;
+    
+    button.appendChild(ripple);
+}
+
+export async function reExecuteOperationFromHistory(historyInput) {
+    bajarteclado();
+    salida.innerHTML = "";
+    let calculationSuccessful = false;
     const primosMatch = historyInput.match(/^factores\((\d+)\)$/);
-    const raizMatch = historyInput.match(/^√\((.+)\)$/); // Acepta decimales
+    const raizMatch = historyInput.match(/^√\((.+)\)$/);
     
     try {
         if (primosMatch) {
-            const numero = primosMatch[1]; // Extrae solo el número, ej: "145"
-            display.innerHTML = numero; // La función de factores espera solo el número en el display
+            const numero = primosMatch[1];
+            display.innerHTML = numero;
             await desFacPri(numero);
-            calculationSuccessful = !salida.querySelector('.output-screen__error-message');
         } else if (raizMatch) {
-            const numero = raizMatch[1]; // Extrae el número, ej: "144" o "12.5"
-            display.innerHTML = numero; // La función de raíz espera solo el número en el display
+            const numero = raizMatch[1];
+            display.innerHTML = numero;
             await raizCuadrada(numero);
-            calculationSuccessful = !salida.querySelector('.output-screen__error-message');
         } else {
-            // Para operaciones binarias, el display debe contener la expresión completa
-            display.innerHTML = historyInput; // Establece la expresión completa (ej. "9+9,3")
-            await calcular(false); // Llama a calcular, indicándole que NO añada al historial
-            calculationSuccessful = !salida.querySelector('.output-screen__error-message');
+            display.innerHTML = historyInput;
+            await calcular(false);
         }
+        calculationSuccessful = !salida.querySelector('.output-screen__error-message');
     } catch (error) {
         console.error("Error durante la re-ejecución:", error);
         salida.appendChild(crearMensajeError(errorMessages.genericError));
         calculationSuccessful = false;
     } finally {
-        // *** CRUCIAL: Restaura el formato original en el display para consistencia visual ***
-        display.innerHTML = historyInput; 
-        activadoBotones(display.innerHTML); // Actualiza el estado de los botones
+        display.innerHTML = historyInput;
+        activadoBotones(display.innerHTML);
     }
-
-    return calculationSuccessful; // Retorna si la re-ejecución fue exitosa
+    return calculationSuccessful;
 }
 
-
-// --- handleAction: Refactorizado para usar la función centralizada ---
 async function handleAction(action) {
     switch (action) {
-        case 'view-screen':
-            bajarteclado();
-            break;
-        case 'calculate':
-            await calcular(true); 
-            break;
-        case 'clear':
-            escribir('c');
-            break;
-        case 'delete':
-            escribir('del');
-            break;
-        case 'hide-screen':
-            subirteclado();
-            break;
+        case 'view-screen': bajarteclado(); break;
+        case 'calculate': await calcular(true); break;
+        case 'clear': escribir('c'); break;
+        case 'delete': escribir('del'); break;
+        case 'hide-screen': subirteclado(); break;
         case 'divide-expanded':
         case 'divide-normal':
             divext = (action === 'divide-expanded');
@@ -177,41 +174,25 @@ async function handleAction(action) {
                 actualizarEstadoDivisionUI(false);
             }
             break;
-
-        // --- CÓDIGO PARA FACTORES PRIMOS (AHORA USA LA LÓGICA CENTRALIZADA) ---
         case 'primos': {
             const numero = display.innerHTML;
             const inputParaHistorial = `factores(${numero})`;
             const success = await reExecuteOperationFromHistory(inputParaHistorial); 
-            if (success) {
-                HistoryManager.add({
-                    input: inputParaHistorial,
-                    visualHtml: salida.innerHTML
-                });
-            }
+            if (success) HistoryManager.add({ input: inputParaHistorial, visualHtml: salida.innerHTML });
             break;
         }
-
-        // --- CÓDIGO PARA RAÍZ CUADRADA (AHORA USA LA LÓGICA CENTRALIZADA) ---
         case 'raiz': {
             const numero = display.innerHTML;
             const inputParaHistorial = `√(${numero})`;
             const success = await reExecuteOperationFromHistory(inputParaHistorial); 
-            if (success) {
-                HistoryManager.add({
-                    input: inputParaHistorial,
-                    visualHtml: salida.innerHTML
-                });
-            }
+            if (success) HistoryManager.add({ input: inputParaHistorial, visualHtml: salida.innerHTML });
             break;
         }
-
-        default:
-            console.warn(`Acción desconocida: ${action}`);
+        default: console.warn(`Acción desconocida: ${action}`);
     }
 }
 
-// --- LÓGICA DE LA APLICACIÓN (con pequeña modificación en calcular) ---
+// --- LÓGICA DE LA APLICACIÓN ---
 function escribir(t) {
     const currentDisplay = display.innerHTML;
     const isOperator = ['+', '-', 'x', '/'].includes(t);
@@ -225,27 +206,18 @@ function escribir(t) {
     else if (isOperator) {
         const lastChar = currentDisplay.slice(-1);
         const lastCharIsOperator = ['+', '-', 'x', '/'].includes(lastChar);
-        
-        if (hasBinaryOperatorInExpression && !lastCharIsOperator) { 
-            return;
-        } else if (lastCharIsOperator) { 
-            if (lastChar === t) return; 
+        if (hasBinaryOperatorInExpression && !lastCharIsOperator) return;
+        if (lastCharIsOperator) {
+            if (lastChar === t) return;
             display.innerHTML = currentDisplay.slice(0, -1) + t;
-        } else if (currentDisplay === "0") { 
-            if (t === '-') {
-                display.innerHTML = t; 
-            } else {
-                return; 
-            }
-        } else if (currentDisplay.endsWith(',')) {
-            return; 
-        } else { 
-            display.innerHTML = currentDisplay + t;
-        }
+        } else if (currentDisplay === "0") {
+            if (t === '-') display.innerHTML = t;
+            else return;
+        } else if (currentDisplay.endsWith(',')) return;
+        else display.innerHTML = currentDisplay + t;
     }
     else {
-        if (t === ',' && currentDisplay.endsWith(',')) return; 
-
+        if (t === ',' && currentDisplay.endsWith(',')) return;
         display.innerHTML = (currentDisplay === "0" && t !== ',') ? t : currentDisplay + t;
     }
     
@@ -253,8 +225,7 @@ function escribir(t) {
     actualizarEstadoDivisionUI(false); 
 }
 
-// *** MODIFICACIÓN: calcular ahora acepta un parámetro para controlar si añade al historial ***
-async function calcular(addToHistory = true) { // Añade el parámetro con valor por defecto 'true'
+async function calcular(addToHistory = true) {
     const entrada = display.innerHTML;
     const operadorMatch = entrada.match(/[+\-x/]/);
 
@@ -265,6 +236,13 @@ async function calcular(addToHistory = true) { // Añade el parámetro con valor
         actualizarEstadoDivisionUI(false);
         return; 
     }
+
+    // *** CORRECCIÓN: La animación de glitch se activa aquí, justo cuando se calcula. ***
+    display.setAttribute('data-text', entrada);
+    display.classList.add('glitch');
+    setTimeout(() => {
+        display.classList.remove('glitch');
+    }, 300); // La duración debe coincidir con la animación CSS
 
     const operador = operadorMatch[0];
     const numerosAR = parsearNumeros(entrada, operador);
@@ -287,14 +265,13 @@ async function calcular(addToHistory = true) { // Añade el parámetro con valor
     const calculationError = salida.querySelector('.output-screen__error-message');
     actualizarEstadoDivisionUI(operador === '/' && !calculationError);
 
-    // *** MODIFICACIÓN: Solo añade al historial si 'addToHistory' es true ***
     if (addToHistory && !calculationError) {
         HistoryManager.add({ input: entrada, visualHtml: salida.innerHTML });
     }
     activadoBotones(display.innerHTML);
 }
 
-// --- El resto del archivo sin cambios significativos en la lógica ---
+// --- FUNCIONES DE UI ---
 function subirteclado() {
     teclado.classList.remove('keyboard--hidden');
     salida.classList.remove('output-screen--visible');
@@ -323,11 +300,8 @@ function actualizarEstadoDivisionUI(esDivisionValida) {
 function activadoBotones(contDisplay) {
     const esSoloCero = contDisplay === '0';
     const hasBinaryOperatorInExpression = /[+\-x/]/.test(contDisplay.slice(contDisplay.startsWith('-') ? 1 : 0).replace(/^[0-9,]+/, ''));
-    
     const partes = contDisplay.split(/[+\-x/]/);
     const ultimoNumero = partes[partes.length - 1];
-    const terminaEnOperador = ['+', '-', 'x', '/'].includes(contDisplay.slice(-1));
-
     const demasiadosCaracteres = contDisplay.length >= 21;
     const ultimoNumeroDemasiadoLargo = ultimoNumero.length >= 15;
     const deshabilitarNumeros = demasiadosCaracteres || ultimoNumeroDemasiadoLargo;
@@ -337,17 +311,10 @@ function activadoBotones(contDisplay) {
     });
 
     document.querySelectorAll('[data-value="+"], [data-value="-"], [data-value="x"], [data-value="/"]').forEach(btn => {
-        const isMinusButton = btn.dataset.value === '-';
-        if (demasiadosCaracteres) {
-            btn.disabled = true; 
-        } else if (hasBinaryOperatorInExpression) {
-            btn.disabled = true; 
-        } else if (esSoloCero) {
-            btn.disabled = true; 
-        } else if (contDisplay.endsWith(',')) {
-            btn.disabled = true; 
+        if (demasiadosCaracteres || hasBinaryOperatorInExpression || esSoloCero || contDisplay.endsWith(',')) {
+            btn.disabled = true;
         } else {
-            btn.disabled = false; 
+            btn.disabled = false;
         }
     });
 
@@ -365,43 +332,42 @@ function activadoBotones(contDisplay) {
     if (btnIgual) btnIgual.disabled = !esCalculable;
 }
 
+// --- CÓDIGO DE ANIMACIÓN DEL TÍTULO (Refactorizado) ---
+function setupTitleAnimation() {
+    let baseTitle = "Calculadora Facundo 🧮";
+    let altTitle = "¡Regresa! 😢 🧮 ";
+    let scrollTitle = altTitle + " ";
+    let interval;
+    let pos = 0;
+    let timeout;
+
+    function startTitleAnimation() {
+        clearInterval(interval);
+        clearTimeout(timeout);
+        pos = 0;
+        interval = setInterval(() => {
+            document.title = scrollTitle.substring(pos) + scrollTitle.substring(0, pos);
+            pos = (pos + 1) % scrollTitle.length;
+        }, 400); // *** CORRECCIÓN: Ajusté el tiempo a 400ms para que sea menos frenético
+    }
+
+    function stopTitleAnimation() {
+        clearInterval(interval);
+        clearTimeout(timeout);
+        document.title = "Gracias por volver 😊";
+        timeout = setTimeout(() => {
+            document.title = baseTitle;
+        }, 2000);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            startTitleAnimation();
+        } else {
+            stopTitleAnimation();
+        }
+    });
+}
+
+// --- INICIO DE LA APLICACIÓN ---
 document.addEventListener('DOMContentLoaded', alCargar);
-
-
-// --- Código de animación del título (sin cambios) ---
-let baseTitle = "Calculadora Facundo 🧮";
-let altTitle = "¡Regresa! 😢 🧮 ";
-let scrollTitle = altTitle + " ";
-let interval;
-let pos = 0;
-let timeout;
-
-function startTitleAnimation() {
-  clearInterval(interval);
-  clearTimeout(timeout);
-  pos = 0;
-
-  interval = setInterval(() => {
-    document.title = scrollTitle.substring(pos) + scrollTitle.substring(0, pos);
-    pos = (pos + 1) % scrollTitle.length;
-  }, 40); 
-}
-
-function stopTitleAnimation() {
-  clearInterval(interval);
-  clearTimeout(timeout);
-
-  document.title = "Gracias por volver 😊";
-
-  timeout = setTimeout(() => {
-    document.title = baseTitle;
-  }, 2000);
-}
-
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    startTitleAnimation();
-  } else {
-    stopTitleAnimation();
-  }
-});

@@ -51,3 +51,41 @@
         transform: scale(1);
     }
 }
+
+
+@keyframes move-grid {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: -96px -96px; // Mueve exactamente un cuadro de la rejilla
+    }
+}
+
+@keyframes neon-pulse {
+    0% {
+        box-shadow: 0 0 5px rgba(var(--neon-color-1), 0.2),
+                    0 0 10px rgba(var(--neon-color-1), 0.2),
+                    0 0 20px rgba(var(--neon-color-1), 0.2),
+                    0 0 40px rgba(var(--neon-color-2), 0.1),
+                    inset 0 0 5px rgba(var(--neon-color-1), 0.1);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(var(--neon-color-1), 0.4),
+                    0 0 20px rgba(var(--neon-color-1), 0.4),
+                    0 0 40px rgba(var(--neon-color-1), 0.2),
+                    0 0 80px rgba(var(--neon-color-2), 0.2),
+                    inset 0 0 10px rgba(var(--neon-color-1), 0.2);
+    }
+}
+
+@keyframes ripple-effect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+@keyframes glitch-main { 0%, 100% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(-3px, -3px); } 60% { transform: translate(3px, 3px); } 80% { transform: translate(3px, -3px); } }
+@keyframes glitch-anim-1 { 0% { clip-path: inset(30% 0 60% 0); } 100% { clip-path: inset(50% 0 20% 0); } }
+@keyframes glitch-anim-2 { 0% { clip-path: inset(80% 0 10% 0); } 100% { clip-path: inset(10% 0 75% 0); } }
