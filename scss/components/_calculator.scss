@@ -1,4 +1,6 @@
-/* --- COMPONENTE: CALCULADORA (CONTENEDOR, PANTALLA, TECLADO) --- */
+/* ======================================================= */
+/* --- _calculator.scss (CORREGIDO Y OPTIMIZADO) --- */
+/* ======================================================= */
 
 .calculator-container {
     position: relative;
@@ -6,6 +8,9 @@
     max-width: 480px;
     opacity: 0;
     transition: opacity 1s;
+
+    // Aplicamos el efecto de brillo de neón con el mixin
+    @include neon-pulse-effect($btn-equal-bg, $btn-special-bg, 6s);
 
     @media (max-width: 600px) {
         width: 100% !important;
@@ -32,6 +37,9 @@
     word-wrap: break-word;
     overflow: hidden;
 
+    // Aplicamos el efecto de glitch digital con el mixin
+    @include glitch-effect($bg-display, $btn-op-bg, $btn-special-bg);
+
     @media (max-width: 600px) {
         font-size: 10vw !important;
         padding: 15px;
@@ -39,7 +47,8 @@
     }
 }
 
-#display { // Estilo suelto del CSS original
+// Selector de ID para compatibilidad con el HTML existente, pero se recomienda evitarlo.
+#display {
   margin-left: 0;
   @media (max-width: 600px) {
       margin-left: 0 !important;
@@ -86,7 +95,8 @@
     }
 
     &__button {
-        position: relative;
+        position: relative; // Crucial para el ripple
+        overflow: hidden;    // Y para contenerlo
         display: flex;
         justify-content: center;
         align-items: center;
@@ -94,7 +104,6 @@
         font-family: 'Chakra Petch', sans-serif;
         font-size: 1.4rem;
         border: 2px solid #000;
-        overflow: hidden;
         transition: transform 0.1s ease, background-color 0.2s ease;
 
         &--number { background-color: $btn-num-bg; }
@@ -114,12 +123,26 @@
             transform: scale(1.05);
         }
 
+        &:active:not(:disabled) {
+            transform: scale(0.95); // Efecto de "presionar"
+        }
+
         &:disabled {
             background-color: $btn-disabled-bg !important;
             color: $btn-disabled-text;
             cursor: not-allowed;
             animation: none !important;
             transform: none !important;
+        }
+        
+        // Contenedor para el efecto de onda (ripple)
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple-effect 0.6s linear;
+            pointer-events: none;
         }
 
         @media (max-width: 600px) {
@@ -242,67 +265,6 @@
             @media (max-width: 600px) {
                 font-size: 7vw !important;
             }
-        }
-    }
-}
-
-
-.calculator-container {
-    // ... tus estilos existentes ...
-    // Usa los colores de tus botones para el brillo
-    --neon-color-1: #{$btn-equal-bg};
-    --neon-color-2: #{$btn-special-bg};
-    
-    animation: neon-pulse 5s infinite alternate;
-}
-
-.keyboard__button {
-    // ... tus estilos existentes ...
-    position: relative; // Crucial para el ripple
-    overflow: hidden; // Y para contenerlo
-    transition: transform 0.1s ease; // Mantén tu transición
-
-    &:active:not(:disabled) {
-        transform: scale(0.95); // Efecto de "presionar"
-    }
-
-    .ripple {
-        position: absolute;
-        border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.6);
-        transform: scale(0);
-        animation: ripple-effect 0.6s linear;
-        pointer-events: none; // El ripple no debe ser clickeable
-    }
-}
-.display {
-    // ... tus estilos existentes ...
-    position: relative; // Necesario para el glitch
-
-    &.glitch {
-        animation: glitch-main 0.3s linear;
-
-        &::before, &::after {
-            content: attr(data-text); // Copia el texto del atributo
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: $bg-display;
-            overflow: hidden;
-        }
-
-        &::before {
-            left: 2px;
-            text-shadow: -2px 0 $btn-op-bg;
-            animation: glitch-anim-1 0.8s infinite linear alternate-reverse;
-        }
-
-        &::after {
-            left: -2px;
-            text-shadow: -2px 0 $btn-special-bg, 2px 2px $btn-equal-bg;
-            animation: glitch-anim-2 0.6s infinite linear alternate-reverse;
         }
     }
 }
