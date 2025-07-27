@@ -9,9 +9,22 @@
 /* Colores de Botones */
 /* Dimensiones */
 /* Variables para el Lector de Números (dentro del modal) */
-/* ======================================================= */
-/* --- _base.scss (CON EL NUEVO FONDO CÓSMICO) --- */
-/* ======================================================= */
+/* --- RESET Y ESTILOS BASE GLOBALES --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  html {
+    box-sizing: border-box;
+  }
+  html *, html *:before, html *:after {
+    box-sizing: inherit;
+  }
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -19,35 +32,11 @@ body {
   align-items: center;
   min-height: 100dvh;
   padding: 20px;
+  background-color: #121212;
+  background-image: repeating-linear-gradient(90deg, rgba(200, 200, 200, 0.04) 0 1px, transparent 1px 96px), repeating-linear-gradient(0deg, rgba(200, 200, 200, 0.04) 0 1px, transparent 1px 96px);
   font-family: "Quicksand", sans-serif;
   color: #eee;
-  background-color: #121212;
-  background-image: radial-gradient(ellipse at 50% 150%, rgba(102, 255, 102, 0.15), transparent 50%);
-  overflow: hidden;
-  perspective: 800px;
-}
-body::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: repeating-linear-gradient(90deg, rgba(102, 102, 255, 0.2) 0 1px, transparent 1px 60px), repeating-linear-gradient(0deg, rgba(102, 102, 255, 0.2) 0 1px, transparent 1px 60px);
-  transform-origin: center top;
-  transform: rotateX(75deg);
-  animation: flow-grid 30s linear infinite;
-}
-body::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  box-shadow: 259px 977px rgba(240, 230, 140, 0.8), -670px 152px rgba(240, 230, 140, 0.8), -320px -317px rgba(240, 230, 140, 0.8), 422px -221px rgba(240, 230, 140, 0.8), -674px -266px rgba(240, 230, 140, 0.8), -467px 850px rgba(240, 230, 140, 0.8), -621px -838px rgba(240, 230, 140, 0.8), -68px -139px rgba(240, 230, 140, 0.8), -606px -715px rgba(240, 230, 140, 0.8), 178px -647px rgba(240, 230, 140, 0.8), -757px -828px rgba(240, 230, 140, 0.8), 71px -659px rgba(240, 230, 140, 0.8), -173px -877px rgba(240, 230, 140, 0.8), -764px 404px rgba(240, 230, 140, 0.8), -962px -348px rgba(240, 230, 140, 0.8), 290px 435px rgba(240, 230, 140, 0.8), 200px -977px rgba(240, 230, 140, 0.8), -490px 297px rgba(240, 230, 140, 0.8), -280px 959px rgba(240, 230, 140, 0.8), 346px -435px rgba(240, 230, 140, 0.8), -718px -204px rgba(240, 230, 140, 0.8), 976px 196px rgba(240, 230, 140, 0.8), -787px 689px rgba(240, 230, 140, 0.8), 988px 891px rgba(240, 230, 140, 0.8), 700px 305px rgba(240, 230, 140, 0.8), 288px -939px rgba(240, 230, 140, 0.8), -200px -252px rgba(240, 230, 140, 0.8), -904px 989px rgba(240, 230, 140, 0.8), 623px 228px rgba(240, 230, 140, 0.8), -637px -588px rgba(240, 230, 140, 0.8), -892px -870px rgba(240, 230, 140, 0.8), -119px -504px rgba(240, 230, 140, 0.8), 242px -783px rgba(240, 230, 140, 0.8), -62px 743px rgba(240, 230, 140, 0.8), 854px -563px rgba(240, 230, 140, 0.8), -174px -11px rgba(240, 230, 140, 0.8), 367px -557px rgba(240, 230, 140, 0.8), 977px -296px rgba(240, 230, 140, 0.8), -594px 800px rgba(240, 230, 140, 0.8), 206px 534px rgba(240, 230, 140, 0.8), 856px 245px rgba(240, 230, 140, 0.8), -545px 89px rgba(240, 230, 140, 0.8), 278px -391px rgba(240, 230, 140, 0.8), -517px 367px rgba(240, 230, 140, 0.8), -755px 488px rgba(240, 230, 140, 0.8), -402px 664px rgba(240, 230, 140, 0.8), 234px -941px rgba(240, 230, 140, 0.8), 545px -896px rgba(240, 230, 140, 0.8), -104px 293px rgba(240, 230, 140, 0.8), 433px -870px rgba(240, 230, 140, 0.8), -593px 999px rgba(240, 230, 140, 0.8), 612px 32px rgba(240, 230, 140, 0.8), -620px -987px rgba(240, 230, 140, 0.8), -277px 894px rgba(240, 230, 140, 0.8), 743px 256px rgba(240, 230, 140, 0.8), -389px -818px rgba(240, 230, 140, 0.8), -11px -207px rgba(240, 230, 140, 0.8), -124px 115px rgba(240, 230, 140, 0.8), 507px -631px rgba(240, 230, 140, 0.8), 312px -900px rgba(240, 230, 140, 0.8), 994px -948px rgba(240, 230, 140, 0.8), -997px 320px rgba(240, 230, 140, 0.8), 334px -681px rgba(240, 230, 140, 0.8), -644px -665px rgba(240, 230, 140, 0.8), -695px 412px rgba(240, 230, 140, 0.8), -583px -582px rgba(240, 230, 140, 0.8), -807px 619px rgba(240, 230, 140, 0.8), 103px -946px rgba(240, 230, 140, 0.8), 831px 874px rgba(240, 230, 140, 0.8), -364px 242px rgba(240, 230, 140, 0.8), 802px -144px rgba(240, 230, 140, 0.8), 827px 913px rgba(240, 230, 140, 0.8), 867px -433px rgba(240, 230, 140, 0.8), 223px -249px rgba(240, 230, 140, 0.8), -475px 994px rgba(240, 230, 140, 0.8), 156px 613px rgba(240, 230, 140, 0.8), -475px 764px rgba(240, 230, 140, 0.8), 948px -533px rgba(240, 230, 140, 0.8), 932px -799px rgba(240, 230, 140, 0.8), -498px 226px rgba(240, 230, 140, 0.8), -275px -713px rgba(240, 230, 140, 0.8), -493px -777px rgba(240, 230, 140, 0.8), -953px 246px rgba(240, 230, 140, 0.8), -169px -351px rgba(240, 230, 140, 0.8), 714px 414px rgba(240, 230, 140, 0.8), -111px -958px rgba(240, 230, 140, 0.8), -252px -517px rgba(240, 230, 140, 0.8), -549px 110px rgba(240, 230, 140, 0.8), 323px -917px rgba(240, 230, 140, 0.8), 837px 700px rgba(240, 230, 140, 0.8), -803px 676px rgba(240, 230, 140, 0.8), -192px 291px rgba(240, 230, 140, 0.8), 529px 173px rgba(240, 230, 140, 0.8), -923px 159px rgba(240, 230, 140, 0.8), -346px 444px rgba(240, 230, 140, 0.8), 622px -636px rgba(240, 230, 140, 0.8), 7px 732px rgba(240, 230, 140, 0.8), 772px 626px rgba(240, 230, 140, 0.8), -124px 680px rgba(240, 230, 140, 0.8), 151px 896px rgba(240, 230, 140, 0.8), 320px 486px rgba(255, 51, 51, 0.6), -183px -721px rgba(255, 51, 51, 0.6), 279px 642px rgba(255, 51, 51, 0.6), 985px 675px rgba(255, 51, 51, 0.6), -846px 517px rgba(255, 51, 51, 0.6), 335px -796px rgba(255, 51, 51, 0.6), -587px -679px rgba(255, 51, 51, 0.6), 858px -565px rgba(255, 51, 51, 0.6), 451px -668px rgba(255, 51, 51, 0.6), -857px 485px rgba(255, 51, 51, 0.6), -432px -752px rgba(255, 51, 51, 0.6), -638px 26px rgba(255, 51, 51, 0.6), 11px 38px rgba(255, 51, 51, 0.6), 43px -460px rgba(255, 51, 51, 0.6), 301px 680px rgba(255, 51, 51, 0.6), 495px -139px rgba(255, 51, 51, 0.6), 382px 543px rgba(255, 51, 51, 0.6), -653px 828px rgba(255, 51, 51, 0.6), 148px 262px rgba(255, 51, 51, 0.6), 254px -613px rgba(255, 51, 51, 0.6), 321px -925px rgba(255, 51, 51, 0.6), 735px 305px rgba(255, 51, 51, 0.6), 533px 572px rgba(255, 51, 51, 0.6), 699px -729px rgba(255, 51, 51, 0.6), 704px -803px rgba(255, 51, 51, 0.6), -150px 785px rgba(255, 51, 51, 0.6), 747px -416px rgba(255, 51, 51, 0.6), 588px 667px rgba(255, 51, 51, 0.6), 154px -820px rgba(255, 51, 51, 0.6), 939px -578px rgba(255, 51, 51, 0.6), -870px 910px rgba(255, 51, 51, 0.6), 685px 200px rgba(255, 51, 51, 0.6), 641px -514px rgba(255, 51, 51, 0.6), 492px 575px rgba(255, 51, 51, 0.6), -29px -339px rgba(255, 51, 51, 0.6), -545px -699px rgba(255, 51, 51, 0.6), 946px -73px rgba(255, 51, 51, 0.6), -238px 855px rgba(255, 51, 51, 0.6), 357px 197px rgba(255, 51, 51, 0.6), -838px 212px rgba(255, 51, 51, 0.6), -31px -994px rgba(255, 51, 51, 0.6), 214px 648px rgba(255, 51, 51, 0.6), 926px -542px rgba(255, 51, 51, 0.6), -858px 346px rgba(255, 51, 51, 0.6), -508px 483px rgba(255, 51, 51, 0.6), -137px 363px rgba(255, 51, 51, 0.6), -367px 211px rgba(255, 51, 51, 0.6), -24px 809px rgba(255, 51, 51, 0.6), 473px 938px rgba(255, 51, 51, 0.6), 641px 101px rgba(255, 51, 51, 0.6), -656px 890px rgba(255, 51, 51, 0.6), -741px -646px rgba(255, 51, 51, 0.6), -682px 872px rgba(255, 51, 51, 0.6), -560px 173px rgba(255, 51, 51, 0.6), -999px -211px rgba(255, 51, 51, 0.6), 957px -71px rgba(255, 51, 51, 0.6), -86px -306px rgba(255, 51, 51, 0.6), 321px 157px rgba(255, 51, 51, 0.6), 32px 364px rgba(255, 51, 51, 0.6), -238px 79px rgba(255, 51, 51, 0.6), -49px 17px rgba(255, 51, 51, 0.6), 887px -662px rgba(255, 51, 51, 0.6), -963px -522px rgba(255, 51, 51, 0.6), -632px -271px rgba(255, 51, 51, 0.6), 351px -3px rgba(255, 51, 51, 0.6), 482px -839px rgba(255, 51, 51, 0.6), 298px 355px rgba(255, 51, 51, 0.6), -145px 725px rgba(255, 51, 51, 0.6), 134px -963px rgba(255, 51, 51, 0.6), 472px 534px rgba(255, 51, 51, 0.6), 685px 656px rgba(255, 51, 51, 0.6), 556px -239px rgba(255, 51, 51, 0.6), 643px 501px rgba(255, 51, 51, 0.6), 135px -91px rgba(255, 51, 51, 0.6), 251px -934px rgba(255, 51, 51, 0.6), 257px -873px rgba(255, 51, 51, 0.6), -725px 630px rgba(255, 51, 51, 0.6), 917px -902px rgba(255, 51, 51, 0.6), -178px -561px rgba(255, 51, 51, 0.6), -137px -273px rgba(255, 51, 51, 0.6), -498px -397px rgba(255, 51, 51, 0.6), 969px 124px rgba(255, 51, 51, 0.6), 385px -656px rgba(255, 51, 51, 0.6), -106px 247px rgba(255, 51, 51, 0.6), -283px -658px rgba(255, 51, 51, 0.6), 486px -851px rgba(255, 51, 51, 0.6), 933px -937px rgba(255, 51, 51, 0.6), -585px 863px rgba(255, 51, 51, 0.6), 771px -593px rgba(255, 51, 51, 0.6), 381px -46px rgba(255, 51, 51, 0.6), -890px 823px rgba(255, 51, 51, 0.6), -931px -947px rgba(255, 51, 51, 0.6), -256px 974px rgba(255, 51, 51, 0.6), 444px 280px rgba(255, 51, 51, 0.6), -665px -380px rgba(255, 51, 51, 0.6), -118px 376px rgba(255, 51, 51, 0.6), 378px -953px rgba(255, 51, 51, 0.6), 266px -245px rgba(255, 51, 51, 0.6), 943px 977px rgba(255, 51, 51, 0.6), 500px -157px rgba(255, 51, 51, 0.6), -486px 710px rgba(102, 102, 255, 0.7), 615px 294px rgba(102, 102, 255, 0.7), 747px -200px rgba(102, 102, 255, 0.7), 525px 556px rgba(102, 102, 255, 0.7), -687px 775px rgba(102, 102, 255, 0.7), -846px -672px rgba(102, 102, 255, 0.7), 26px -301px rgba(102, 102, 255, 0.7), -892px 654px rgba(102, 102, 255, 0.7), -883px 736px rgba(102, 102, 255, 0.7), -361px -105px rgba(102, 102, 255, 0.7), 534px -871px rgba(102, 102, 255, 0.7), 980px -580px rgba(102, 102, 255, 0.7), 704px 586px rgba(102, 102, 255, 0.7), -512px 671px rgba(102, 102, 255, 0.7), -211px 825px rgba(102, 102, 255, 0.7), 288px 424px rgba(102, 102, 255, 0.7), -551px 457px rgba(102, 102, 255, 0.7), -814px -830px rgba(102, 102, 255, 0.7), 997px 847px rgba(102, 102, 255, 0.7), 360px 118px rgba(102, 102, 255, 0.7), -177px -154px rgba(102, 102, 255, 0.7), 103px 22px rgba(102, 102, 255, 0.7), -16px 292px rgba(102, 102, 255, 0.7), 758px -73px rgba(102, 102, 255, 0.7), 558px 286px rgba(102, 102, 255, 0.7), 106px -569px rgba(102, 102, 255, 0.7), 791px -262px rgba(102, 102, 255, 0.7), -784px -295px rgba(102, 102, 255, 0.7), 136px -862px rgba(102, 102, 255, 0.7), 932px 805px rgba(102, 102, 255, 0.7), -421px -694px rgba(102, 102, 255, 0.7), 958px 738px rgba(102, 102, 255, 0.7), 444px -74px rgba(102, 102, 255, 0.7), -287px 783px rgba(102, 102, 255, 0.7), -3px 373px rgba(102, 102, 255, 0.7), -42px 763px rgba(102, 102, 255, 0.7), 389px 686px rgba(102, 102, 255, 0.7), 18px 852px rgba(102, 102, 255, 0.7), -928px -436px rgba(102, 102, 255, 0.7), 510px -195px rgba(102, 102, 255, 0.7), -902px 721px rgba(102, 102, 255, 0.7), 531px 587px rgba(102, 102, 255, 0.7), 815px 270px rgba(102, 102, 255, 0.7), -968px 799px rgba(102, 102, 255, 0.7), -741px 778px rgba(102, 102, 255, 0.7), 794px 832px rgba(102, 102, 255, 0.7), 45px 215px rgba(102, 102, 255, 0.7), 920px 127px rgba(102, 102, 255, 0.7), 278px -550px rgba(102, 102, 255, 0.7), 724px -161px rgba(102, 102, 255, 0.7), -153px 188px rgba(102, 102, 255, 0.7), -283px -554px rgba(102, 102, 255, 0.7), -708px -769px rgba(102, 102, 255, 0.7), -321px -821px rgba(102, 102, 255, 0.7), 710px 914px rgba(102, 102, 255, 0.7), 662px 261px rgba(102, 102, 255, 0.7), 31px -497px rgba(102, 102, 255, 0.7), -584px 647px rgba(102, 102, 255, 0.7), 488px 146px rgba(102, 102, 255, 0.7), -579px 881px rgba(102, 102, 255, 0.7), 864px -840px rgba(102, 102, 255, 0.7), 819px 749px rgba(102, 102, 255, 0.7), 421px -317px rgba(102, 102, 255, 0.7), 125px 1000px rgba(102, 102, 255, 0.7), -604px -235px rgba(102, 102, 255, 0.7), 826px -89px rgba(102, 102, 255, 0.7), -499px 518px rgba(102, 102, 255, 0.7), -524px 718px rgba(102, 102, 255, 0.7), -405px -309px rgba(102, 102, 255, 0.7), -461px 715px rgba(102, 102, 255, 0.7), 183px -136px rgba(102, 102, 255, 0.7), -598px 553px rgba(102, 102, 255, 0.7), -901px -289px rgba(102, 102, 255, 0.7), 743px -421px rgba(102, 102, 255, 0.7), -504px -206px rgba(102, 102, 255, 0.7), -635px -369px rgba(102, 102, 255, 0.7), -524px 779px rgba(102, 102, 255, 0.7), 264px -298px rgba(102, 102, 255, 0.7), 195px 169px rgba(102, 102, 255, 0.7), -767px -70px rgba(102, 102, 255, 0.7), -745px 312px rgba(102, 102, 255, 0.7), -913px -361px rgba(102, 102, 255, 0.7), -13px 171px rgba(102, 102, 255, 0.7), 214px 349px rgba(102, 102, 255, 0.7), -721px -752px rgba(102, 102, 255, 0.7), 181px -586px rgba(102, 102, 255, 0.7), 510px 662px rgba(102, 102, 255, 0.7), 678px -670px rgba(102, 102, 255, 0.7), 921px 713px rgba(102, 102, 255, 0.7), -852px -8px rgba(102, 102, 255, 0.7), -16px -763px rgba(102, 102, 255, 0.7), -243px -310px rgba(102, 102, 255, 0.7), 239px -240px rgba(102, 102, 255, 0.7), 550px -825px rgba(102, 102, 255, 0.7), 799px -118px rgba(102, 102, 255, 0.7), -695px -58px rgba(102, 102, 255, 0.7), 389px 14px rgba(102, 102, 255, 0.7), -167px 720px rgba(102, 102, 255, 0.7), 156px -22px rgba(102, 102, 255, 0.7), -246px 66px rgba(102, 102, 255, 0.7);
-  animation: flow-particles-1 40s linear infinite, flow-particles-2 60s linear infinite, flow-particles-3 80s linear infinite;
+  overflow: hidden; /* Evita scroll en escritorio */
 }
 @media (max-width: 600px) {
   body {
@@ -58,41 +47,64 @@ body::after {
   }
 }
 
-/* ======================================================= */
-/* --- animations.scss (VERSIÓN MEJORADA Y OPTIMIZADA) --- */
-/* ======================================================= */
-/*
-  Este archivo centraliza todas las animaciones del proyecto.
-  Se divide en:
-  1. Mixins: Bloques de código reutilizables para efectos complejos.
-  2. Keyframes: Las definiciones de las animaciones.
-  3. Clases de Utilidad: Clases que aplican directamente una animación.
-*/
-/**
- * Mixin para el efecto de brillo de neón pulsante.
- * @param {color} $color1 - Color principal del brillo.
- * @param {color} $color2 - Color secundario del brillo.
- * @param {time} $duration - Duración de un ciclo de la animación.
- */
-/**
- * Mixin para el efecto de "glitch" digital en un elemento.
- * Se aplica a un contenedor que tendrá la clase .glitch
- * y un atributo data-text con el contenido a mostrar.
- */
-@keyframes fadeIn {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+button {
+  border: none;
+  outline: none;
+  font-family: inherit;
+  cursor: pointer;
+  line-height: 1.2;
 }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #66FF66;
+  outline-offset: 2px;
+}
+
+.error {
+  color: #e84d4d;
+}
+
+body {
+  position: relative;
+  overflow: hidden;
+}
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(90deg, rgba(200, 200, 200, 0.04) 0 1px, transparent 1px 96px), repeating-linear-gradient(0deg, rgba(200, 200, 200, 0.04) 0 1px, transparent 1px 96px);
+  background-size: 96px 96px;
+  animation: move-grid 20s linear infinite;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+/* --- ANIMACIONES GLOBALES Y KEYFRAMES --- */
 @keyframes fadeInScale-animation {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+.animate-fade-in-scale {
+  opacity: 0;
+  transform: scale(0.5);
+  animation: fadeInScale-animation 0.5s forwards cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes arcoiris {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 @keyframes pulse {
@@ -105,29 +117,18 @@ body::after {
     opacity: 0.8;
   }
 }
-@keyframes move-grid {
+.pulse {
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
   from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: -96px -96px;
-  }
-}
-@keyframes arcoiris {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-@keyframes ripple-effect {
-  to {
-    transform: scale(4);
+    transform: scale(0.8);
     opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 @keyframes history-item-highlight {
@@ -144,12 +145,26 @@ body::after {
     transform: scale(1);
   }
 }
-@keyframes neon-pulse {
+@keyframes move-grid {
   from {
-    box-shadow: 0 0 5px rgba(var(--neon-color-1), 0.3), 0 0 10px rgba(var(--neon-color-1), 0.2), 0 0 20px rgba(var(--neon-color-2), 0.2), inset 0 0 5px rgba(var(--neon-color-2), 0.1);
+    background-position: 0 0;
   }
   to {
-    box-shadow: 0 0 10px rgba(var(--neon-color-1), 0.5), 0 0 20px rgba(var(--neon-color-1), 0.3), 0 0 40px rgba(var(--neon-color-2), 0.3), inset 0 0 10px rgba(var(--neon-color-2), 0.2);
+    background-position: -96px -96px;
+  }
+}
+@keyframes neon-pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(var(--neon-color-1), 0.2), 0 0 10px rgba(var(--neon-color-1), 0.2), 0 0 20px rgba(var(--neon-color-1), 0.2), 0 0 40px rgba(var(--neon-color-2), 0.1), inset 0 0 5px rgba(var(--neon-color-1), 0.1);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(var(--neon-color-1), 0.4), 0 0 20px rgba(var(--neon-color-1), 0.4), 0 0 40px rgba(var(--neon-color-1), 0.2), 0 0 80px rgba(var(--neon-color-2), 0.2), inset 0 0 10px rgba(var(--neon-color-1), 0.2);
+  }
+}
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
   }
 }
 @keyframes glitch-main {
@@ -183,49 +198,6 @@ body::after {
   }
   100% {
     clip-path: inset(10% 0 75% 0);
-  }
-}
-.animate-fade-in-scale {
-  opacity: 0;
-  transform: scale(0.5);
-  animation: fadeInScale-animation 0.5s forwards cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.pulse {
-  animation: pulse 0.5s ease-in-out;
-}
-
-/* --- EN _animations.scss --- */
-@keyframes flow-grid {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 0 -1000px;
-  }
-}
-@keyframes flow-particles-1 {
-  from {
-    transform: translateY(0%);
-  }
-  to {
-    transform: translateY(-100%);
-  }
-}
-@keyframes flow-particles-2 {
-  from {
-    transform: translateY(0%);
-  }
-  to {
-    transform: translateY(-100%);
-  }
-}
-@keyframes flow-particles-3 {
-  from {
-    transform: translateY(0%);
-  }
-  to {
-    transform: translateY(-100%);
   }
 }
 /* --- CONTENEDORES PRINCIPALES DE LAYOUT --- */
@@ -322,18 +294,13 @@ header[role=banner] .subtitle a:hover {
   }
 }
 
-/* ======================================================= */
-/* --- _calculator.scss (CORREGIDO Y OPTIMIZADO) --- */
-/* ======================================================= */
+/* --- COMPONENTE: CALCULADORA (CONTENEDOR, PANTALLA, TECLADO) --- */
 .calculator-container {
   position: relative;
   width: 100%;
   max-width: 480px;
   opacity: 0;
   transition: opacity 1s;
-  animation: neon-pulse 6s infinite alternate;
-  --neon-color-1: #66FF66;
-  --neon-color-2: #6666FF;
 }
 @media (max-width: 600px) {
   .calculator-container {
@@ -360,30 +327,6 @@ header[role=banner] .subtitle a:hover {
   border-radius: 10px;
   word-wrap: break-word;
   overflow: hidden;
-  position: relative;
-}
-.display.glitch {
-  animation: glitch-main 0.3s linear both;
-}
-.display.glitch::before, .display.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #1a1a1a;
-  overflow: hidden;
-}
-.display.glitch::before {
-  left: 3px;
-  text-shadow: -2px 0 #FF3333;
-  animation: glitch-anim-1 0.8s infinite linear alternate-reverse steps(2, end);
-}
-.display.glitch::after {
-  left: -3px;
-  text-shadow: -2px 0 #6666FF, 2px 2px #FF3333;
-  animation: glitch-anim-2 0.6s infinite linear alternate-reverse steps(2, end);
 }
 @media (max-width: 600px) {
   .display {
@@ -444,7 +387,6 @@ header[role=banner] .subtitle a:hover {
 }
 .keyboard__button {
   position: relative;
-  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -452,6 +394,7 @@ header[role=banner] .subtitle a:hover {
   font-family: "Chakra Petch", sans-serif;
   font-size: 1.4rem;
   border: 2px solid #000;
+  overflow: hidden;
   transition: transform 0.1s ease, background-color 0.2s ease;
 }
 .keyboard__button--number {
@@ -479,23 +422,12 @@ header[role=banner] .subtitle a:hover {
   animation: arcoiris 2s linear infinite;
   transform: scale(1.05);
 }
-.keyboard__button:active:not(:disabled) {
-  transform: scale(0.95);
-}
 .keyboard__button:disabled {
   background-color: #333 !important;
   color: #666;
   cursor: not-allowed;
   animation: none !important;
   transform: none !important;
-}
-.keyboard__button .ripple {
-  position: absolute;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.6);
-  transform: scale(0);
-  animation: ripple-effect 0.6s linear;
-  pointer-events: none;
 }
 @media (max-width: 600px) {
   .keyboard__button {
@@ -622,6 +554,56 @@ header[role=banner] .subtitle a:hover {
   .bottom-nav__button--arrow {
     font-size: 7vw !important;
   }
+}
+
+.calculator-container {
+  --neon-color-1: #66FF66;
+  --neon-color-2: #6666FF;
+  animation: neon-pulse 5s infinite alternate;
+}
+
+.keyboard__button {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.1s ease;
+}
+.keyboard__button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+.keyboard__button .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: ripple-effect 0.6s linear;
+  pointer-events: none;
+}
+
+.display {
+  position: relative;
+}
+.display.glitch {
+  animation: glitch-main 0.3s linear;
+}
+.display.glitch::before, .display.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+  overflow: hidden;
+}
+.display.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 #FF3333;
+  animation: glitch-anim-1 0.8s infinite linear alternate-reverse;
+}
+.display.glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 #6666FF, 2px 2px #66FF66;
+  animation: glitch-anim-2 0.6s infinite linear alternate-reverse;
 }
 
 /* --- COMPONENTE: PANEL DE HISTORIAL --- */

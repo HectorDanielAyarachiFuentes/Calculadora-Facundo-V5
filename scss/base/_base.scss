@@ -1,89 +1,78 @@
-/* ======================================================= */
-/* --- _base.scss (CON EL NUEVO FONDO CÓSMICO) --- */
-/* ======================================================= */
+/* --- RESET Y ESTILOS BASE GLOBALES --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-// ... (El reset de * y html se mantiene igual)
+html {
+    @media (max-width: 600px) {
+        box-sizing: border-box;
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+    }
+}
 
 body {
-    // --- Configuración base ---
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100dvh;
     padding: 20px;
+    background-color: $bg-main;
+    background-image: repeating-linear-gradient(90deg, $bg-grid-lines 0 1px, transparent 1px 96px),
+                      repeating-linear-gradient(0deg, $bg-grid-lines 0 1px, transparent 1px 96px);
     font-family: 'Quicksand', sans-serif;
     color: #eee;
-    
-    // --- INICIO DE LA MAGIA DEL FONDO 3D ---
-    background-color: $bg-main;
-    // Capa 1: Neblina de neón en la base para dar profundidad
-    background-image: radial-gradient(
-        ellipse at 50% 150%, 
-        rgba($btn-equal-bg, 0.15), // Color del brillo
-        transparent 50%
-    );
-    overflow: hidden; // Crucial para que nada se salga del escenario
-    
-    // Establecemos un contexto de perspectiva 3D para los hijos
-    perspective: 800px;
+    overflow: hidden; /* Evita scroll en escritorio */
 
-    // --- Capa 2: La Rejilla de Datos en Perspectiva ---
-    &::before {
-        content: '';
-        position: absolute;
-        top: 50%; 
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: 
-            repeating-linear-gradient(90deg, rgba($btn-special-bg, 0.2) 0 1px, transparent 1px 60px),
-            repeating-linear-gradient(0deg, rgba($btn-special-bg, 0.2) 0 1px, transparent 1px 60px);
-        
-        // La transformación 3D que inclina la rejilla
-        transform-origin: center top;
-        transform: rotateX(75deg);
-        
-        // La animación que la hace fluir
-        animation: flow-grid 30s linear infinite;
+    @media (max-width: 600px) {
+        margin: 0;
+        padding: env(safe-area-inset-top, 10px) env(safe-area-inset-right, 10px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 10px);
+        overflow-y: auto;
+        overflow-x: hidden;
     }
-    
-    // --- Capa 3: Las Partículas de Datos (generadas con box-shadow) ---
-    &::after {
+}
+
+button {
+    border: none;
+    outline: none;
+    font-family: inherit;
+    cursor: pointer;
+    line-height: 1.2;
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid $focus-color;
+    outline-offset: 2px;
+}
+
+.error {
+    color: $color-error;
+}
+
+
+body {
+    // ... tus estilos existentes ...
+    position: relative; // Necesario para el pseudo-elemento
+    overflow: hidden; // Asegura que nada se salga
+
+    &::before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: transparent;
-        
-        // Usamos la técnica de box-shadow para crear múltiples "estrellas"
-        // sin añadir elementos al DOM. ¡Es muy eficiente!
-        // Generamos 3 capas de partículas con diferentes tamaños y velocidades.
-        $particles-1: ();
-        $particles-2: ();
-        $particles-3: ();
-
-        @for $i from 1 through 100 {
-            $particles-1: append($particles-1, (random(2000) - 1000) + px (random(2000) - 1000) + px rgba($color-display-text, 0.8), comma);
-            $particles-2: append($particles-2, (random(2000) - 1000) + px (random(2000) - 1000) + px rgba($btn-op-bg, 0.6), comma);
-            $particles-3: append($particles-3, (random(2000) - 1000) + px (random(2000) - 1000) + px rgba($btn-special-bg, 0.7), comma);
-        }
-
-        // Aplicamos las 3 capas de sombras y sus animaciones para el efecto parallax
-        box-shadow: $particles-1, $particles-2, $particles-3;
-        animation: 
-            flow-particles-1 40s linear infinite,
-            flow-particles-2 60s linear infinite,
-            flow-particles-3 80s linear infinite;
-    }
-    
-    // --- Resto de los estilos ---
-    @media (max-width: 600px) {
-        margin: 0;
-        padding: env(safe-area-inset-top, 10px) env(safe-area-inset-right, 10px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 10px);
-        overflow-y: auto;
-        overflow-x: hidden;
+        background-image: 
+            repeating-linear-gradient(90deg, $bg-grid-lines 0 1px, transparent 1px 96px),
+            repeating-linear-gradient(0deg, $bg-grid-lines 0 1px, transparent 1px 96px);
+        background-size: 96px 96px; // Tamaño explícito
+        animation: move-grid 20s linear infinite;
+        z-index: -1; // Detrás de todo el contenido
+        opacity: 0.5; // Un poco más sutil
     }
 }
